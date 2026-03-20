@@ -10,8 +10,8 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Email Wrapped"/>
   <Description DefaultValue="Your monthly email stats wrapped up in a fun, shareable experience!"/>
-  <IconUrl DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon-64.png"/>
-  <HighResolutionIconUrl DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon-128.png"/>
+<IconUrl DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon.svg"/>
+<HighResolutionIconUrl DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon.svg"/>
   <SupportUrl DefaultValue="https://jakemontef.github.io/emailwrapped"/>
   <AppDomains>
     <AppDomain>jakemontef.github.io</AppDomain>
@@ -68,9 +68,9 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon-64.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon.svg"/>
+<bt:Image id="Icon.32x32" DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon.svg"/>
+<bt:Image id="Icon.80x80" DefaultValue="https://jakemontef.github.io/emailwrapped/assets/icon.svg"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="Taskpane.Url" DefaultValue="https://jakemontef.github.io/emailwrapped/"/>

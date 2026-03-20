@@ -618,11 +618,17 @@
     }, 500);
   }
 
-  // Start the app
-  if (typeof Office !== 'undefined') {
-    initOffice();
-  } else {
-    // Running in browser without Outlook — use demo data
+// Start the app
+  try {
+    if (typeof Office !== 'undefined' && Office.context) {
+      initOffice();
+    } else {
+      setTimeout(() => {
+        loadFallbackData();
+        hideLoading();
+      }, 2500);
+    }
+  } catch(e) {
     setTimeout(() => {
       loadFallbackData();
       hideLoading();

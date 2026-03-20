@@ -21,7 +21,7 @@
   </Hosts>
   <Requirements>
     <Sets>
-      <Set Name="MailBox" MinVersion="1.1"/>
+      <Set Name="MailBox" MinVersion="1.5"/>
     </Sets>
   </Requirements>
   <FormSettings>
@@ -32,7 +32,7 @@
       </DesktopSettings>
     </Form>
   </FormSettings>
-  <Permissions>ReadItem</Permissions>
+  <Permissions>ReadWriteMailbox</Permissions>
   <Rule xsi:type="RuleCollection" Mode="Or">
     <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
   </Rule>

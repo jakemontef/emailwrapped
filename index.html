@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Wrapped</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f0f0f0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .wrapped-container {
+      width: 360px;
+      height: 640px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+    }
+
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 30px;
+      text-align: center;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .card.prev {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+
+    /* Card Themes */
+    .card-1 { background: linear-gradient(160deg, #FF6B6B, #FF8E53); }
+    .card-2 { background: linear-gradient(160deg, #4ECDC4, #44A08D); }
+    .card-3 { background: linear-gradient(160deg, #A855F7, #6366F1); }
+    .card-4 { background: linear-gradient(160deg, #F59E0B, #EF4444); }
+    .card-5 { background: linear-gradient(160deg, #10B981, #3B82F6); }
+    .card-6 { background: linear-gradient(160deg, #EC4899, #8B5CF6); }
+
+    .emoji {
+      font-size: 72px;
+      margin-bottom: 16px;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0px); }
+      to { transform: translateY(-10px); }
+    }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 12px;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .card-stat {
+      font-size: 90px;
+      color: white;
+      line-height: 1;
+      margin-bottom: 12px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      font-family: 'Fredoka One', cursive;
+    }
+
+    .card-title {
+      font-size: 32px;
+      color: white;
+      margin-bottom: 12px;
+      line-height: 1.2;
+      font-family: 'Fredoka One', cursive;
+    }
+
+    .card-description {
+      font-size: 15px;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.6;
+      max-width: 280px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .card-tag {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .progress-segment {
+      height: 3px;
+      flex: 1;
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-segment.done { background: white; }
+
+    .progress-segment.active {
+      background: rgba(255,255,255,0.3);
+      position: relative;
+    }
+
+    .progress-segment.active::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      height: 100%;
+      background: white;
+      animation: fillBar 3s linear forwards;
+    }
+
+    @keyframes fillBar {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
+    /* Navigation */
+    .nav-areas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      z-index: 5;
+    }
+
+    .nav-prev { width: 35%; cursor: pointer; }
+    .nav-next { width: 65%; cursor: pointer; }
+
+    /* Brand */
+    .brand {
+      position: absolute;
+      bottom: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Final card share button */
+    .share-btn {
+      margin-top: 24px;
+      background: white;
+      color: #8B5CF6;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 32px;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
+      font-family: 'Fredoka One', cursive;
+    }
+
+    .share-btn:hover { transform: scale(1.05); }
+
+    .personality-badge {
+      font-size: 26px;
+      color: white;
+      background: rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 12px 24px;
+      margin-bottom: 16px;
+      font-family: 'Fredoka One', cursive;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapped-container">
+
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Card 1: Emails Sent -->
+  <div class="card card-1 active">
+    <div class="emoji">📤</div>
+    <div class="card-label">This Month You Sent</div>
+    <div class="card-stat">247</div>
+    <div class="card-title">emails.</div>
+    <div class="card-description">That's basically a second job. Does HR know about this? Do YOU know about this?</div>
+    <div class="card-tag">📊 Above average sender</div>
+  </div>
+
+  <!-- Card 2: Top Person -->
+  <div class="card card-2">
+    <div class="emoji">👀</div>
+    <div class="card-label">Your Most Emailed Person</div>
+    <div class="card-title">Sarah Johnson</div>
+    <div class="card-description">47 emails this month. At this point just text her. This is basically a situationship. 💀</div>
+    <div class="card-tag">🏆 Your Work Bestie</div>
+  </div>
+
+  <!-- Card 3: Reply Speed -->
+  <div class="card card-3">
+    <div class="emoji">⚡</div>
+    <div class="card-label">Your Average Reply Time</div>
+    <div class="card-stat">4m</div>
+    <div class="card-title">You reply fast.</div>
+    <div class="card-description">Suspiciously fast. Do you have notifications on for every. single. email? It's okay. We won't tell anyone.</div>
+    <div class="card-tag">🚀 The Speedrunner</div>
+  </div>
+
+  <!-- Card 4: Busiest Time -->
+  <div class="card card-4">
+    <div class="emoji">🌙</div>
+    <div class="card-label">Your Busiest Email Hour</div>
+    <div class="card-stat">11pm</div>
+    <div class="card-title">Seriously?</div>
+    <div class="card-description">The office is closed. Your family is asleep. And you are OUT HERE sending emails. Respect. Terrifying, but respect.</div>
+    <div class="card-tag">🦉 Certified Night Owl</div>
+  </div>
+
+  <!-- Card 5: Longest Thread -->
+  <div class="card card-5">
+    <div class="emoji">🧵</div>
+    <div class="card-label">Your Longest Email Thread</div>
+    <div class="card-stat">34</div>
+    <div class="card-title">replies deep.</div>
+    <div class="card-description">34 replies. THIRTY FOUR. This should have been a meeting. This should have been a phone call. This should have been therapy.</div>
+    <div class="card-tag">📞 Should've Called</div>
+  </div>
+
+  <!-- Card 6: Personality Final -->
+  <div class="card card-6">
+    <div class="emoji">🏆</div>
+    <div class="card-label">Your 2026 Email Personality</div>
+    <div class="personality-badge">The Night Owl Speedrunner</div>
+    <div class="card-description">You reply faster than anyone but exclusively at midnight. You are a mystery. You are a legend. You need sleep.</div>
+    <button class="share-btn" onclick="shareWrapped()">Share My Wrapped 🚀</button>
+    <div style="margin-top:12px; font-size:12px; color:rgba(255,255,255,0.6); font-family:'DM Sans',sans-serif;">Tap to share with your team</div>
+  </div>
+
+  <!-- Nav Areas -->
+  <div class="nav-areas">
+    <div class="nav-prev" onclick="prevCard()"></div>
+    <div class="nav-next" onclick="nextCard()"></div>
+  </div>
+
+  <div class="brand">Email Wrapped 2026</div>
+</div>
+
+<script>
+  let current = 0;
+  const totalCards = 6;
+  const cards = document.querySelectorAll('.card');
+  const progressBar = document.getElementById('progressBar');
+
+  for (let i = 0; i < totalCards; i++) {
+    const seg = document.createElement('div');
+    seg.className = 'progress-segment' + (i === 0 ? ' active' : '');
+    seg.id = 'seg-' + i;
+    progressBar.appendChild(seg);
+  }
+
+  function updateProgress() {
+    for (let i = 0; i < totalCards; i++) {
+      const seg = document.getElementById('seg-' + i);
+      seg.className = 'progress-segment';
+      if (i < current) seg.classList.add('done');
+      if (i === current) seg.classList.add('active');
+    }
+  }
+
+  function showCard(index) {
+    cards.forEach((card, i) => {
+      card.classList.remove('active', 'prev');
+      if (i === index) card.classList.add('active');
+      if (i < index) card.classList.add('prev');
+    });
+    updateProgress();
+  }
+
+  function nextCard() {
+    if (current < totalCards - 1) {
+      current++;
+      showCard(current);
+    }
+  }
+
+  function prevCard() {
+    if (current > 0) {
+      current--;
+      showCard(current);
+    }
+  }
+
+  function shareWrapped() {
+    alert("📸 Screenshot this card and post it!\n\n#EmailWrapped2026 #WorkLife");
+  }
+
+  updateProgress();
+</script>
+
+</body>
+</html>
